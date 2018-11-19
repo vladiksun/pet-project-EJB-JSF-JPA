@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+        <ui:composition template="./main2.xhtml">
+
+            <ui:define name="content">
+                <h:form id="mainform">
+                    
+                    <h:panelGrid id="toppanel" columns="5" cellpadding="3">  
+                         <p:button outcome="create" value="Create new record" icon="ui-icon-star"/> 
+                         <p:outputLabel value="Export all data to Excel"/>
+                         <h:commandLink >  
+                            <p:graphicImage library="images" name="excel-all.png" />  
+                            <p:dataExporter type="xls" target="studentdatatable" fileName="data" />  
+                         </h:commandLink>  
+                         <p:outputLabel value="Export page data to Excel"/>
+                         <h:commandLink >  
+                            <p:graphicImage library="images" name="excel-all.png" />  
+                            <p:dataExporter type="xls" target="studentdatatable" fileName="data" pageOnly="true" />  
+                         </h:commandLink>           
+                    </h:panelGrid>  
+                    
+                        <p:dataTable id="studentdatatable" var="student" value="#{tableController.students}" sortMode="multiple" rows="6" paginator="true" draggableColumns="true"
+                                     widgetVar="studentTable" emptyMessage="No students found with given criteria" 
+                                     filteredValue="#{tableController.filteredStudents}">
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <span style="margin-left: 430px; margin-right: 150px" >List of Students</span>
+                                    <h:outputText value="Search all fields:" style="margin: 5px 5px" />  
+                                    <p:inputText id="globalFilter" onkeyup="studentTable.filter()" style="width:150px" />
+                                    <p:watermark for="globalFilter" value="global search" />
+                                </p:outputPanel>  
+                                
+                            </f:facet>
+
+                            <p:column filterBy="#{student.firstname}" filterMatchMode="contains">
+                                <f:facet name="header">  
+                                    <h:outputText value="Name" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.firstname}" />
+                            </p:column>
+
+                            <p:column filterBy="#{student.middlename}" filterMatchMode="contains">
+                                <f:facet name="header">  
+                                    <h:outputText value="Middle name" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.middlename}" />
+                            </p:column>
+
+                            <p:column filterBy="#{student.lastname}" filterMatchMode="contains">
+                                <f:facet name="header">  
+                                    <h:outputText value="Last Name" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.lastname}" />
+                            </p:column>
+
+                            <p:column filterBy="#{student.entrydate}" filterMatchMode="contains">
+                                <f:facet name="header">  
+                                    <h:outputText value="Entry Date" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.entrydate}" />
+                            </p:column>
+
+                            <p:column filterBy="#{student.scholarshiptype}" filterOptions="#{constantValuesHolder.scholarshipTypeOptions}" 
+                                      filterMatchMode="exact">
+                                <f:facet name="header">  
+                                    <h:outputText value="Scholarship Type" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.scholarshiptype}" />
+                            </p:column>
+
+                            <p:column filterBy="#{student.group.groupnumber}" filterOptions="#{constantValuesHolder.groupNumbersOptions}" 
+                                      filterMatchMode="exact">
+                                <f:facet name="header">  
+                                    <h:outputText value="Group Number" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.group.groupnumber}"  />
+                            </p:column>
+
+                            <p:column filterBy="#{student.group.faculty}" filterOptions="#{constantValuesHolder.facultyOptions}" 
+                                      filterMatchMode="exact">
+                                <f:facet name="header">  
+                                    <h:outputText value="Faculty" />  
+                                </f:facet> 
+                                <h:outputText value="#{student.group.faculty}" />
+                            </p:column>
+
+                            <p:column >   
+                                <p:growl id="deletegrowl" showDetail="true" sticky="false" life="2000" /> 
+                                <p:commandLink action="#{tableController.deleteStudent(student.id)}" update="@form,deletegrowl" >
+                                    <p:graphicImage library="images" name="delete.png"/>
+                                </p:commandLink>
+                            </p:column>
+                            
+                            <p:column >                               
+                                <p:commandLink  oncomplete="editDialog.show()" update=":dlgForm:display"  >
+                                    <f:setPropertyActionListener value="#{student}" target="#{tableController.selectedStudent}" />
+                                    <p:graphicImage library="images" name="edit.png"/>
+                                </p:commandLink>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                In total there are #{tableController.students.size()} students.
+                            </f:facet>
+
+                        </p:dataTable>
+                     </h:form>
+                    
+                        <p:dialog header="Edit student record" widgetVar="editDialog" resizable="false"
+                                                                width="500" showEffect="clip" hideEffect="fold">
+                            
+                                <h:form id="dlgForm"> 
+                                    <p:growl id="updategrowl" showDetail="true" sticky="false" life="2000" /> 
+                                    <p:messages id="messages" showDetail="false" autoUpdate="true" />
+                                    <p:panelGrid id="display" columns="2" styleClass="no-border" columnClasses="no-border,no-border">
+                                        <p:outputLabel value="First name" for="firstname" />
+                                        <p:inputText id="firstname" label="First name" required="true" value="#{tableController.selectedStudent.firstname}" requiredMessage="First name is required." />
+
+                                        <p:outputLabel value="Middle name" for="middlename" />
+                                        <p:inputText id="middlename" label="Middle name" required="false" value="#{tableController.selectedStudent.middlename}" />
+                                        
+                                        <p:outputLabel value="Last name" for="lastname" />
+                                        <p:inputText id="lastname" label="Last name" required="true" value="#{tableController.selectedStudent.lastname}" requiredMessage="Last name is required." />
+
+                                        <p:outputLabel value="Entry date" for="entrydate" />
+                                        <p:calendar  id="entrydate" label="Entry date" required="true" value="#{tableController.selectedStudent.entrydate}" requiredMessage="Entry date is required." navigator="true"/> 
+                                    
+                                        <p:outputLabel value="Scholarship Type" for="scholarshiptype" />    
+                                        <p:selectOneMenu id="scholarshiptype" label="Scholarship Type" required="true" value="#{tableController.selectedStudent.scholarshiptype}" requiredMessage="Scholarship Type is required.">  
+                                                <f:selectItem itemLabel="Select Scholarship type " itemValue="" />  
+                                                <f:selectItems value="#{constantValuesHolder.scholarshipType}" />  
+                                        </p:selectOneMenu>
+                                        
+                                        <p:outputLabel value="Group number" for="groupnumber" />    
+                                        <p:selectOneMenu id="groupnumber" label="Group number" required="true" value="#{tableController.selectedStudent.group.groupnumber}" requiredMessage="Group number is required.">  
+                                                <f:selectItem itemLabel="Select Group number" itemValue="" />  
+                                                <f:selectItems value="#{constantValuesHolder.groupNumbers}" />  
+                                        </p:selectOneMenu> 
+                                        
+                                        <p:outputLabel value="Faculty" for="faculty" />    
+                                        <p:selectOneMenu id="faculty" label="Faculty" required="true" value="#{tableController.selectedStudent.group.faculty}" requiredMessage="Faculty is required.">  
+                                                <f:selectItem itemLabel="Select faculty" itemValue="" />  
+                                                <f:selectItems value="#{constantValuesHolder.faculty}" />  
+                                        </p:selectOneMenu> 
+                                        
+                                        <p:commandButton value="Update student record" actionListener="#{tableController.updateStudent(tableController.selectedStudent)}" update=":mainform,updategrowl" />
+                                        
+                                    
+                                    </p:panelGrid>
+                                </h:form>
+                        </p:dialog>
+
+                        
+            </ui:define>
+        
+        </ui:composition>
+
+    </body>
+</html>

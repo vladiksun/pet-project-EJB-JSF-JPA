@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./main2.xhtml">
+
+            <ui:define name="content">
+                <h:form id="createform">
+                    <p:growl id="creategrowl" showDetail="true" sticky="false" life="2000" />  
+                    <p:panel id="panel" class="createpanel" header="Create student record">
+                        <p:messages id="messages" showDetail="false" autoUpdate="true" />
+                        <p:panelGrid columns="2" styleClass="no-border" columnClasses="no-border,no-border">
+                            <p:outputLabel value="First name" for="firstname" />
+                            <p:inputText id="firstname" label="First name" required="true" value="#{createController.credentials.firstname}" requiredMessage="First name is required." />
+                            
+                            <p:outputLabel value="Middle name" for="middlename" />
+                            <p:inputText id="middlename" label="Middle name" required="false" value="#{createController.credentials.middlename}" />
+                            
+                            <p:outputLabel value="Last name" for="lastname" />
+                            <p:inputText id="lastname" label="Last name" required="true" value="#{createController.credentials.lastname}" requiredMessage="Last name is required." />
+                            
+                            <p:outputLabel value="Entry date" for="entrydate" />
+                            <p:calendar  id="entrydate" label="Entry date" required="true" value="#{createController.credentials.entrydate}" requiredMessage="Entry date is required." navigator="true"/> 
+                            
+                            <p:outputLabel value="Scholarship Type" for="scholarshiptype" />    
+                            <p:selectOneMenu id="scholarshiptype" label="Scholarship Type" required="true" value="#{createController.credentials.scholarshiptype}" requiredMessage="Scholarship Type is required.">  
+                                    <f:selectItem itemLabel="Select Scholarship type " itemValue="" />  
+                                    <f:selectItems value="#{constantValuesHolder.scholarshipType}" />  
+                            </p:selectOneMenu> 
+                            
+                            <p:outputLabel value="Group number" for="groupnumber" />    
+                            <p:selectOneMenu id="groupnumber" label="Group number" required="true" value="#{createController.credentials.groupnumber}" requiredMessage="Group number is required.">  
+                                    <f:selectItem itemLabel="Select Group number" itemValue="" />  
+                                    <f:selectItems value="#{constantValuesHolder.groupNumbers}" />  
+                            </p:selectOneMenu> 
+                            
+                            <p:outputLabel value="Faculty" for="faculty" />    
+                            <p:selectOneMenu id="faculty" label="Faculty" required="true" value="#{createController.credentials.faculty}" requiredMessage="Faculty is required.">  
+                                    <f:selectItem itemLabel="Select faculty" itemValue="" />  
+                                    <f:selectItems value="#{constantValuesHolder.faculty}" />  
+                            </p:selectOneMenu> 
+                            
+                            <p:commandButton value="Save student" actionListener="#{createController.createStudent()}" update="@form,creategrowl" />
+                            <p:button outcome="index" value="Go to datatable" icon="ui-icon-star"/> 
+                            <h:outputText value="" />
+                        </p:panelGrid>
+                    </p:panel>
+                </h:form>
+                   
+            </ui:define>
+        
+        </ui:composition>
+
+    </body>
+</html>

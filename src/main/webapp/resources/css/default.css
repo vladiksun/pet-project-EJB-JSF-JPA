@@ -1,0 +1,30 @@
+
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 90% !important;
+}
+
+.ui-layout-pane {
+    border: none;  
+}
+
+
+.no-border {
+	border:none;	
+}
+.ui-panelgrid td.no-border {
+	border:none;
+        
+}
+table.no-border .ui-widget-content {
+	border:none;	
+}
+
+.createpanel {
+    margin-left: 250px;
+    margin-right: 250px;
+}
+
+#headerimage{
+    margin-left: 90px;
+}
+

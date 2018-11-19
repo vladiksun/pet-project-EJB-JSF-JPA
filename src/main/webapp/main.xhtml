@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+            <f:facet name="last">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Test Task</title>
+                <h:outputStylesheet library="css" name="default.css" />
+            </f:facet>
+    </h:head>
+
+    <h:body>
+        
+        <p:layout fullPage="true">
+
+                <p:layoutUnit position="north" size="100" resizable="false" closable="true" collapsible="true">
+                    <p:graphicImage library="images" name="header.png" />  
+                </p:layoutUnit>
+
+                <p:layoutUnit position="south" size="20" closable="true" collapsible="true">
+                     <ui:insert name="footer">Footer</ui:insert>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="west" size="120" collapsible="true">
+                    <ui:insert name="left">Left Content</ui:insert>
+                </p:layoutUnit>
+
+                <p:layoutUnit position="center">
+                    <ui:insert name="content">Content</ui:insert>
+                    
+                </p:layoutUnit>
+
+                <p:layoutUnit position="east" size="120" collapsible="true">
+                    <ui:insert name="right">Right Content</ui:insert>
+                </p:layoutUnit>
+
+            </p:layout>
+        
+    </h:body>
+
+</html>
